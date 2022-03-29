@@ -3,9 +3,9 @@ import React from "react";
 import classes from "./HeaderCartButton.module.css";
 // Icon
 import { BsCartFill } from "react-icons/bs";
-const HeaderCartButton = () => {
+const HeaderCartButton = (props) => {
   return (
-    <button className={classes.button}>
+    <button className={classes.button} onClick={props.cartHandler}>
       <span className={classes.icon}>
         <BsCartFill />
       </span>
