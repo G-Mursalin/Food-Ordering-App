@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/https//G-Mursalin.github.io/Food-Ordering-App/static/css/main.0ffbb4df.css",
+    "main.js": "/https//G-Mursalin.github.io/Food-Ordering-App/static/js/main.340cce4f.js",
+    "static/media/meals.jpg": "/https//G-Mursalin.github.io/Food-Ordering-App/static/media/meals.2971f633fc1382581cbf.jpg",
+    "index.html": "/https//G-Mursalin.github.io/Food-Ordering-App/index.html",
+    "main.0ffbb4df.css.map": "/https//G-Mursalin.github.io/Food-Ordering-App/static/css/main.0ffbb4df.css.map",
+    "main.340cce4f.js.map": "/https//G-Mursalin.github.io/Food-Ordering-App/static/js/main.340cce4f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.0ffbb4df.css",
+    "static/js/main.340cce4f.js"
+  ]
+}
