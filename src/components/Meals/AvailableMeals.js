@@ -8,7 +8,7 @@ import MealItem from "./MealsItem/MealItem";
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
-
+  const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
     fetch(
       "https://food-ordering-app-df79a-default-rtdb.firebaseio.com/meals.json"
@@ -26,8 +26,13 @@ const AvailableMeals = () => {
         }
 
         setMeals(loadedData);
+        setIsLoading(false);
       });
   }, []);
+
+  if (isLoading) {
+    return <p className={classes.MealsLoading}>Loading....</p>;
+  }
 
   const mealsList = meals.map((meal) => <MealItem key={meal.id} meal={meal} />);
   return (
