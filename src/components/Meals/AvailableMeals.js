@@ -9,11 +9,17 @@ import MealItem from "./MealsItem/MealItem";
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
   useEffect(() => {
     fetch(
       "https://food-ordering-app-df79a-default-rtdb.firebaseio.com/meals.json"
     )
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) {
+          setError(true);
+        }
+        return res.json();
+      })
       .then((data) => {
         const loadedData = [];
         for (const key in data) {
@@ -24,11 +30,15 @@ const AvailableMeals = () => {
             price: data[key].price,
           });
         }
-
         setMeals(loadedData);
         setIsLoading(false);
+        setError(false);
       });
   }, []);
+
+  if (error) {
+    return <p className={classes.MealsError}>Something Went Wrong</p>;
+  }
 
   if (isLoading) {
     return <p className={classes.MealsLoading}>Loading....</p>;
