@@ -10,6 +10,9 @@ import { useContext } from "react";
 import CartContext from "../../store/cart-context";
 
 const Cart = (props) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [didSubmit, setDidSubmit] = useState(false);
+  const [error, setError] = useState(false);
   const cartCtx = useContext(CartContext);
   const [isCheckout, setIsCheckout] = useState(false);
   const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
@@ -24,6 +27,33 @@ const Cart = (props) => {
   const orderHandler = () => {
     setIsCheckout(true);
   };
+
+  const submitOrderHandler = (userData) => {
+    setIsSubmitting(true);
+    fetch(
+      "https://food-ordering-app-df79a-default-rtdb.firebaseio.com/orders.json",
+      {
+        method: "POST",
+        body: JSON.stringify({
+          user: userData,
+          ordersItems: cartCtx.items,
+        }),
+      }
+    )
+      .then((res) => {
+        if (!res.ok) {
+          setError(true);
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setError(false);
+        setIsSubmitting(false);
+        setDidSubmit(true);
+        cartCtx.clearCart();
+      });
+  };
+
   const cartItems = (
     <ul className={classes["cart-items"]}>
       {cartCtx.items.map((item) => (
@@ -51,17 +81,68 @@ const Cart = (props) => {
       )}
     </div>
   );
-  return (
-    <Modal cartHandler={props.cartHandler}>
+
+  const content = (
+    <>
       {cartItems}
       <div className={classes.total}>
         <span>Total Amount </span>
         <span>{totalAmount}</span>
       </div>
-      {isCheckout && <Checkout onClose={props.cartHandler} />}
+      {isCheckout && (
+        <Checkout onConfirm={submitOrderHandler} onClose={props.cartHandler} />
+      )}
       {!isCheckout && modalAction}
-    </Modal>
+    </>
   );
+
+  if (error) {
+    return (
+      <Modal cartHandler={props.cartHandler}>
+        <div>
+          <p>Something Went Wrong</p>
+          <div className={classes.actions}>
+            <button
+              className={classes["button--alt"]}
+              onClick={props.cartHandler}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </Modal>
+    );
+  }
+
+  if (isSubmitting) {
+    return (
+      <Modal cartHandler={props.cartHandler}>
+        <div>
+          <p>Taking your order... </p>
+        </div>
+      </Modal>
+    );
+  }
+
+  if (didSubmit) {
+    return (
+      <Modal cartHandler={props.cartHandler}>
+        <div>
+          <p>Successfully take your order</p>
+          <div className={classes.actions}>
+            <button
+              className={classes["button--alt"]}
+              onClick={props.cartHandler}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </Modal>
+    );
+  }
+
+  return <Modal cartHandler={props.cartHandler}>{content}</Modal>;
 };
 
 export default Cart;

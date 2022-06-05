@@ -44,6 +44,12 @@ const Checkout = (props) => {
     if (!isFormValid) return;
 
     // Send Data to server
+    props.onConfirm({
+      name: enteredName,
+      street: enteredStreet,
+      postal: enteredPostal,
+      city: enteredCity,
+    });
   };
 
   //  styles
